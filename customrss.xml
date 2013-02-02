@@ -31,6 +31,7 @@
 	<UserPref name="openfontsize"	display_name="Story Font Size" 		default_value="9pt"/>	
 	<UserPref name="itempadding" 	display_name="Title Spacing"		default_value="3px"/>
 	<UserPref name="title_wordwrap" display_name="Title Word Wrap?"		default_value="true" datatype="bool" />
+	<UserPref name="title_ellipsis" display_name="Ellipsis for Overflow?"		default_value="true" datatype="bool" />
 	<UserPref name="bullet" 		display_name="Title Bullet" 		default_value="icon"	datatype="enum" >
 	   <EnumValue value="" />
 	   <EnumValue value="icon" display_value="favicon.ico"/>
@@ -152,7 +153,10 @@
 					
 					if (!prefs.getBool("title_wordwrap")) {
 						w("	.custom_title {");
-						w("		text-overflow: ellipsis; white-space: nowrap; overflow: hidden;");
+						if (prefs.getBool("title_ellipsis")) {
+							w("	text-overflow: ellipsis;");
+						}
+						w("		white-space: nowrap; overflow: hidden;");
 						w("	}");
 					}
 					w("	.title_age {");
