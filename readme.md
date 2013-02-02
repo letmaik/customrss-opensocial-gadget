@@ -1,6 +1,6 @@
 This is a fork of the [CustomRSS](http://www.google.de/ig/directory?type=gadgets&url=customrss.googlepages.com/customrss.xml) gadget by David Gurak.
 
-Gadget URL: https://raw.github.com/neothemachine/customrss-opensocial-gadget/master/customrss.xml
+Gadget URL: http://neothemachine.github.com/customrss-opensocial-gadget/customrss.xml
 
 Enhancements
 ------------
