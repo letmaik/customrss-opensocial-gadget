@@ -30,6 +30,7 @@
 	<UserPref name="fontsize" 		display_name="Font Size" 			default_value="8pt"/>	
 	<UserPref name="openfontsize"	display_name="Story Font Size" 		default_value="9pt"/>	
 	<UserPref name="itempadding" 	display_name="Title Spacing"		default_value="3px"/>
+	<UserPref name="title_wordwrap" display_name="Title Word Wrap?"		default_value="true" datatype="bool" />
 	<UserPref name="bullet" 		display_name="Title Bullet" 		default_value="icon"	datatype="enum" >
 	   <EnumValue value="" />
 	   <EnumValue value="icon" display_value="favicon.ico"/>
@@ -74,6 +75,8 @@
 		<EnumValue value="Underline" />
 		<EnumValue value="Strikethrough" />
 	</UserPref>	
+	<UserPref name="showageintitle"	display_name="Show Age in Title?"	datatype="bool"		default_value="false"/>
+	<UserPref name="age_fontsize"	display_name="Age Font Size"	default_value="9px"/>
 	<UserPref name="showdate"	display_name="Show Date?"	datatype="bool"		default_value="true"/>
 	<UserPref name="datecolor"	display_name="Date Text Color"	default_value="9F9F9F"/>
 	<UserPref name="tcolor" 	display_name="Open Title Color" 		default_value="1C57A9"/>	
@@ -107,7 +110,7 @@
 			
 				// Get userprefs
 				var prefs = new _IG_Prefs(__MODULE_ID__);
-				var showdate = prefs.getBool("show_date");
+				var showAgeInTitle = prefs.getBool("showageintitle");
 				var summary = prefs.getBool("show_summ");
 				var entries = prefs.getInt("num_entries");
 				var bullet = prefs.getString("bullet");
@@ -146,6 +149,17 @@
 					w("		text-decoration: none;");
 					w("	}");
 					w("	");
+					
+					if (!prefs.getBool("title_wordwrap")) {
+						w("	.custom_title {");
+						w("		text-overflow: ellipsis; white-space: nowrap; overflow: hidden;");
+						w("	}");
+					}
+					w("	.title_age {");
+					w("		font-size: " + prefs.getString('age_fontsize') +";");
+					w("	}");
+					w("	");
+					
 					w("	.descriptionHighlight {");
 					w("		background: #" + hex(prefs.getString('dback')) +";");
 					w("		border:1px solid #" + hex(prefs.getString('dborder')) +";");
@@ -282,6 +296,7 @@
 										
 										custom_article.id = 'article_'+i;
 										custom_title.id = 'title_'+i;
+										custom_title.className = 'custom_title';
 										custom_desc.id = 'desc_'+i;
 										custom_desc.style.display='none';
 										custom_date.id = 'date_'+i;
@@ -291,10 +306,28 @@
 												custom_title.innerHTML = bullet+"<a id='link_title_"+i+"' class='titlelink' target='_blank' href='" + feed.Entry[i].Link + "'>" + feed.Entry[i].Title + "</a>";
 												break;
 											default:
-												custom_title.innerHTML = bullet+"<a id='link_title_"+i+"' class='titlelink' href='javascript:toggleDescription("+i+");'>" + feed.Entry[i].Title + "</a>";
+												custom_title.innerHTML = bullet+"<a id='link_title_"+i+"' class='titlelink' onclick='toggleDescription("+i+");return false;' href='" + feed.Entry[i].Link + "'>" + feed.Entry[i].Title + "</a>";
 												break;
 												
-										}							
+										}
+
+										if (showAgeInTitle) {
+											var date_ = new Date(feed.Entry[i].Date * 1000); 
+											var s_diff_date="";
+											var diff_date = ((new Date).valueOf() - date_.valueOf())/1000;
+											if (diff_date < 3600) {
+												s_diff_date = Math.round(diff_date/60) + " min";
+											} else {
+												diff_date/=3600.;
+												if (diff_date < 24) {
+													s_diff_date =  Math.round(diff_date) + " h";
+												} else {
+													diff_date/=24.;
+													s_diff_date =  Math.round(diff_date) + " days";
+												}
+											}
+											custom_title.innerHTML+= " <span class='title_age'>(" + s_diff_date + " ago)</span>";
+										}
 										
 										var milliseconds = (feed.Entry[i].Date) * 1000; 
 										var date = new Date(milliseconds); 
