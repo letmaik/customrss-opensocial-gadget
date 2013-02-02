@@ -85,6 +85,7 @@
 	<UserPref name="desclinkcolor" 	display_name="Open Link Color" 	default_value="1B5790"/>
 	<UserPref name="color" 			display_name="Open Text Color" 	default_value="000000"/>
 	<UserPref name="dback" 			display_name="Open Bgrnd Color" 	default_value="FFFFFF"/>
+	<UserPref name="show_border" 		display_name="Open Border?" 	datatype="bool"	default_value="true" />	
 	<UserPref name="dborder" 		display_name="Open Border Color" 		default_value="DFCE6F"/>	
 	<UserPref name="desclinkweight" 	display_name="Open Link Style 1"	default_value="Bold" 	datatype="enum" >
 		<EnumValue value="Normal" />
@@ -166,7 +167,9 @@
 					
 					w("	.descriptionHighlight {");
 					w("		background: #" + hex(prefs.getString('dback')) +";");
-					w("		border:1px solid #" + hex(prefs.getString('dborder')) +";");
+					if (prefs.getBool("show_border")) {
+						w("		border:1px solid #" + hex(prefs.getString('dborder')) +";");
+					}
 					w("	}");
 					w("	");
 					w("	.descriptionHighlight a { font-weight: " + prefs.getString('desclinkweight') +"; color: #" + hex(prefs.getString('desclinkcolor')) +"}");
@@ -258,13 +261,17 @@
 							_gel('article_'+elmnt_id).className = 'descriptionHighlight';
 							_gel('title_'+elmnt_id).style.backgroundColor = hex(prefs.getString('thighlight'));
 							_gel('link_title_'+elmnt_id).style.color = hex(prefs.getString('tcolor'));
-							_gel('title_'+elmnt_id).style.borderBottom = "1px solid #" + hex(prefs.getString('dborder'));
+							if (prefs.getBool("show_border")) {
+								_gel('title_'+elmnt_id).style.borderBottom = "1px solid #" + hex(prefs.getString('dborder'));
+							}
 						} else {
 							_gel('desc_'+elmnt_id).style.display = 'none';
 							_gel('article_'+elmnt_id).className = '';
 							_gel('title_'+elmnt_id).style.backgroundColor = '';
 							_gel('link_title_'+elmnt_id).style.color = '';
-							_gel('title_'+elmnt_id).style.borderBottom = '0px';
+							if (prefs.getBool("show_border")) {
+								_gel('title_'+elmnt_id).style.borderBottom = '0px';
+							}
 						}
 						_IG_AdjustIFrameHeight();
 					}
