@@ -2,6 +2,10 @@ This is a fork of the [CustomRSS](http://www.google.de/ig/directory?type=gadgets
 
 Gadget URL: http://neothemachine.github.com/customrss-opensocial-gadget/customrss.xml
 
+This is how my GitHub news feed looks like in iGoogle:
+
+![github news feed](http://neothemachine.github.com/customrss-opensocial-gadget/example.png)
+
 Enhancements
 ------------
 
